@@ -1,0 +1,6 @@
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('João Silva', 'Rua do Abacaxi', '10', null, 'Brasil', '38.400-12', 'Uberlândia', 'MG', true);
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('Maria Rita', 'Rua do Sabiá', '110', 'Apto 101', 'Colina', '11.400-12', 'Ribeirão Preto', 'SP', false);
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('Pedro Santos', 'Rua da Bateria', '23', null, 'Morumbi', '54.212-12', 'Goiânia', 'GO', true);
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('Ricardo Pereira', 'Rua do Motorista', '123', 'Apto 302', 'Aparecida', '38.400-12', 'Salvador', 'BA', false);
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('Josué Mariano', 'Av Rio Branco', '321', null, 'Jardins', '56.400-12', 'Natal', 'RN', true);
+INSERT INTO person (name, street, number, additional, district, postal_code, city, state, activated) values ('Pedro Barbosa', 'Av Brasil', '100', null, 'Tubalina', '77.400-12', 'Porto Alegre', 'RS', false);
