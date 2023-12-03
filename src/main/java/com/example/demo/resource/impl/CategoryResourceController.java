@@ -1,9 +1,12 @@
 package com.example.demo.resource.impl;
 
+import com.example.demo.event.CreatedResourceEvent;
 import com.example.demo.model.Category;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.resource.CategoryResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +27,9 @@ public class CategoryResourceController implements CategoryResource {
     @Autowired
     private CategoryRepository repository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
     public ResponseEntity<List<Category>> listAll() {
         return ResponseEntity.ok(repository.findAll());
@@ -40,11 +46,8 @@ public class CategoryResourceController implements CategoryResource {
     public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category, HttpServletResponse response) {
         Category savedCategory = repository.save(category);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-                .buildAndExpand(savedCategory.getId()).toUri();
+        eventPublisher.publishEvent(new CreatedResourceEvent(this, response, savedCategory.getId()));
 
-        response.setHeader("Location", uri.toASCIIString());
-
-        return ResponseEntity.created(uri).body(savedCategory);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 }

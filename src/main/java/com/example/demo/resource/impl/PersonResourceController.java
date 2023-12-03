@@ -1,9 +1,12 @@
 package com.example.demo.resource.impl;
 
+import com.example.demo.event.CreatedResourceEvent;
 import com.example.demo.model.Person;
 import com.example.demo.repository.PersonRepository;
 import com.example.demo.resource.PersonResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +25,9 @@ public class PersonResourceController implements PersonResource {
     @Autowired
     private PersonRepository repository;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
     @Override
     public ResponseEntity<List<Person>> findAll() {
         return ResponseEntity.ok(repository.findAll());
@@ -38,11 +44,13 @@ public class PersonResourceController implements PersonResource {
     public ResponseEntity<Person> createPerson(@Valid Person person, HttpServletResponse response) {
         Person savedPerson = repository.save(person);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-                .buildAndExpand(savedPerson.getId()).toUri();
+        eventPublisher.publishEvent(new CreatedResourceEvent(this, response, savedPerson.getId()));
 
-        response.setHeader("Location", uri.toASCIIString());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPerson);
+    }
 
-        return ResponseEntity.created(uri).body(savedPerson);
+    @Override
+    public void deletePerson(Long id) {
+        repository.deleteById(id);
     }
 }

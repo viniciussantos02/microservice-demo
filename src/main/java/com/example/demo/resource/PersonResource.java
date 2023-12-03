@@ -1,6 +1,7 @@
 package com.example.demo.resource;
 
 import com.example.demo.model.Person;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,4 +21,8 @@ public interface PersonResource {
 
     @PostMapping
     ResponseEntity<Person> createPerson(@Valid @RequestBody Person person, HttpServletResponse response);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deletePerson(@PathVariable Long id);
 }
